@@ -1,0 +1,9 @@
+version: "2.0"
+services:
+  octapi-master:
+    build: ./
+    ports:
+    - "22:22"
+    network_mode: host
+    container_name: octapi-master
+    privileged: true

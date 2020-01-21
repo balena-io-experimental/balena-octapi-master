@@ -1,0 +1,33 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-python
+
+# Set the working directory
+WORKDIR /usr/src/app
+
+# Install the required packages and create a directory to allow local running of sshd
+RUN install_packages apt-utils curl nmap python3-pip python3-psutil git openssh-server ssh iputils-ping vim && \
+    mkdir /var/run/sshd && \
+    chmod 0755 /var/run/sshd 
+
+# Get the latest version of Python Pip    
+RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3
+
+# Install pip modules
+RUN pip3 install dispy
+
+# Make a directory for the ssh keys and copy them in
+RUN mkdir -p /root/.ssh
+COPY .ssh/* /root/.ssh/
+RUN chmod 644 /root/.ssh/* && chmod 600 /root/.ssh/id_rsa
+
+# Download and install the octapi scripts and change the default subnet to 10.128.1.*
+RUN git clone https://github.com/raspberrypilearning/octapi-setup.git && \
+    #mkdir -p /home/pi && \
+    mv ./octapi-setup/client/* ./ && \
+    sed -i "s/'192.168.1.*'/'10.128.1.*'/g" ./*.py
+
+# Expose the ssh and dispy ports
+EXPOSE 22 61590 61591
+
+# Start the SSH daemon and drop us to a shell
+CMD ["/usr/sbin/sshd"]
+CMD ["/bin/bash"]
