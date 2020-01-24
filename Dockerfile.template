@@ -1,5 +1,8 @@
 FROM balenalib/%%BALENA_MACHINE_NAME%%-python
 
+# Set your subnet
+ARG SUBNET="10.128.1.*"
+
 # Set the working directory
 WORKDIR /usr/src/app
 
@@ -19,11 +22,10 @@ RUN mkdir -p /root/.ssh
 COPY .ssh/* /root/.ssh/
 RUN chmod 644 /root/.ssh/* && chmod 600 /root/.ssh/id_rsa
 
-# Download and install the octapi scripts and change the default subnet to 10.128.1.*
+# Download and install the octapi scripts and change the default subnet to the value of the SUBNET ARG
 RUN git clone https://github.com/raspberrypilearning/octapi-setup.git && \
-    #mkdir -p /home/pi && \
     mv ./octapi-setup/client/* ./ && \
-    sed -i "s/'192.168.1.*'/'10.128.1.*'/g" ./*.py
+    sed -i "s/'192.168.1.*'/'${SUBNET}'/g" ./*.py
 
 # Expose the ssh and dispy ports
 EXPOSE 22 61590 61591
