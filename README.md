@@ -23,7 +23,7 @@ The master works by SSH-ing into each worker node, so you need to seed the maste
 
 ### Deploy
 Clone this repository, change into the balena-octapi-master directory and push to your application:
-
+```
  $ git clone git@github.com:jtonello/balena-octapi-master.git
  $ cd balena-octapi-master
  $ balena push <appname>
