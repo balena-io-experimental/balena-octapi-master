@@ -20,7 +20,7 @@ The master works by SSH-ing into each worker node, so you need to seed the maste
 │   ├── config
 │   ├── id_rsa
 │   ├── id_rsa.pub
-
+```
 ### Deploy
 Clone this repository, change into the balena-octapi-master directory and push to your application:
 ```
